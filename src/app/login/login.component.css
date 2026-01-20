@@ -1,0 +1,10 @@
+
+/* Ensure background image covers full screen */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+/* for smooth transitions on page*/
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}

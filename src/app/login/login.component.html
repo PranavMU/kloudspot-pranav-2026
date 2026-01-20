@@ -1,0 +1,84 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+  style="background-image: url('assets/bg-full.png');"
+>
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/60"></div>
+
+  <!-- Container -->
+  <div class="relative z-10 max-w-6xl w-full px-6 flex flex-col md:flex-row items-center justify-between gap-12">
+    
+    <!-- Left text -->
+    <div class="max-w-md text-center md:text-left">
+      <p class="text-white text-3xl font-semibold leading-tight">
+        Welcome to the<br />
+        Crowd Management System
+      </p>
+    </div>
+
+    <!-- Login card -->
+    <div class="max-w-[320px] max-w-[360px]">
+      
+      <!-- Logo -->
+      <img
+        src="assets/logo.png"
+        alt="Kloudspot logo"
+        class="w-full rounded-t-md"
+      />
+
+      <!-- Card -->
+      <div class="bg-white rounded-b-md shadow-xl">
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="onSubmit()"
+          class="p-6 space-y-5"
+        >
+          <!-- Username -->
+          <fieldset class="border rounded px-3 pb-2 focus-within:border-teal-600">
+            <legend class="text-xs text-gray-600 px-1">Log In *</legend>
+            <input
+              formControlName="email"
+              type="text"
+              placeholder="Parking_solutions"
+              class="w-full text-sm outline-none"
+            />
+          </fieldset>
+
+          <!-- Password -->
+          <fieldset class="border rounded px-3 pb-2 focus-within:border-teal-600">
+            <legend class="text-xs text-gray-600 px-1">Password *</legend>
+            <div class="relative">
+              <input
+                [type]="showPassword() ? 'text' : 'password'"
+                formControlName="password"
+                class="w-full text-sm pr-8 outline-none"
+              />
+              <button
+                type="button"
+                (click)="togglePasswordVisibility()"
+                class="absolute right-0 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                👁
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Error -->
+          <p *ngIf="errorMessage()" class="text-sm text-red-600">
+            {{ errorMessage() }}
+          </p>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid || isLoading()"
+            class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2.5 rounded font-medium disabled:opacity-50"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

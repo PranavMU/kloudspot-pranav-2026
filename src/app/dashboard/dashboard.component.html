@@ -1,0 +1,318 @@
+<div class="flex h-screen bg-gray-50 overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="w-64  flex flex-col"  style="background-image: url('assets/sidebar-bg.png');">
+    <!-- Logo -->
+    <div class="p-6">
+        <img
+          src="assets/logo-top.png"
+          alt="Kloudspot logo"
+        />
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4">
+      <a routerLink="/dashboard" class="flex items-center gap-3 px-4 py-3 mb-2 bg-gray-100 bg-opacity-20 rounded-lg text-white">
+          <img class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"   src="assets/crw-p.png"/>
+
+        <span class="font-medium">Overview</span>
+      </a>
+      <a routerLink="/entries" class="flex items-center gap-3 px-4 py-3 mb-2 text-white hover:bg-gray-100 hover:bg-opacity-10 rounded-lg transition">
+        <img class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"   src="assets/crw-s.png"/>
+        
+        <span class="font-medium">Crowd Entries</span>
+      </a>
+    </nav>
+
+    <!-- Logout -->
+    <div class="p-4">
+      <button
+        (click)="logout()"
+        class="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-gray-100 hover:bg-opacity-10 rounded-lg transition"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span class="font-medium">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-semibold text-gray-900">Crowd Solutions</h1>
+          <h1 class="text-xl  text-gray-400">|</h1>
+          <div class="w-[200px] h-[40px] flex items-center gap-2 px-3 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer">
+
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span class="text-sm font-medium text-gray-700">Avenue Mall</span>
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button  class="bg-[#47B2B0] w-8 h-8 text-white rounded-full">En</button>
+          <div class="relative">
+            <button 
+              (click)="toggleAlertsPanel()"
+              class="p-2 hover:bg-gray-100 rounded-lg relative"
+            >
+              <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <span *ngIf="getUnreadAlertCount() > 0" class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                {{ getUnreadAlertCount() > 99 ? '99+' : getUnreadAlertCount() }}
+              </span>
+            </button>
+
+            <!-- Alerts Dropdown Panel -->
+
+          </div>
+       
+          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2a5 5 0 100 10 5 5 0 000-10zm-7 18a7 7 0 0114 0H5z"/>
+            </svg>
+          </div>
+
+        
+       
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <!-- Loading State -->
+      <div *ngIf="isLoading()" class="flex justify-center items-center h-full">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div *ngIf="!isLoading()" class="space-y-8">
+        <!-- Page Title -->
+        <div class="flex justify-between"><span class="text-xl font-semibold text-gray-500">Overview</span><div class="w-[200px] h-[40px] flex items-center gap-2 px-3 border border-gray-300">
+  <svg
+    class="w-4 h-4 text-gray-600"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+    />
+  </svg>
+
+  <span class="text-sm text-gray-700 font-medium">Today</span>
+</div>
+</div>
+
+        <!-- Occupancy Section -->
+        <div class="space-y-6">
+          <h3 class="text-xl font-semibold text-gray-500">Occupancy</h3>
+          
+          <!-- Metric Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Live Occupancy Card -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <p class="text-sm text-gray-600 mb-1">Live Occupancy</p>
+                  <p class="text-3xl font-bold text-gray-900">{{ liveOccupancy() }}</p>
+                  <div *ngIf="occupancyComparison()" class="mt-2 flex items-center gap-1">
+                    <svg class="w-4 h-4" [class.text-green-600]="occupancyComparison()!.change >= 0" [class.text-red-600]="occupancyComparison()!.change < 0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-sm font-medium" [class.text-green-600]="occupancyComparison()!.change >= 0" [class.text-red-600]="occupancyComparison()!.change < 0">
+                      {{ Math.abs(occupancyComparison()!.changePercent).toFixed(0) }}% More than yesterday
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Today's Footfall Card -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <p class="text-sm text-gray-600 mb-1">Today's Footfall</p>
+                  <p class="text-3xl font-bold text-gray-900">{{ todayFootfall().toLocaleString() }}</p>
+                  <div *ngIf="footfallComparison()" class="mt-2 flex items-center gap-1">
+                    <svg class="w-4 h-4" [class.text-green-600]="footfallComparison()!.change >= 0" [class.text-red-600]="footfallComparison()!.change < 0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-sm font-medium" [class.text-green-600]="footfallComparison()!.change >= 0" [class.text-red-600]="footfallComparison()!.change < 0">
+                      {{ Math.abs(footfallComparison()!.changePercent).toFixed(0) }}% Less than yesterday
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Avg Dwell Time Card -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <p class="text-sm text-gray-600 mb-1">Avg Dwell Time</p>
+                  <p class="text-3xl font-bold text-gray-900">{{ formatDwellTime(averageDwellTime(), dwellTimeUnit()) }}</p>
+                  <div *ngIf="dwellTimeComparison()" class="mt-2 flex items-center gap-1">
+                    <svg class="w-4 h-4" [class.text-green-600]="dwellTimeComparison()!.change >= 0" [class.text-red-600]="dwellTimeComparison()!.change < 0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-sm font-medium" [class.text-green-600]="dwellTimeComparison()!.change >= 0" [class.text-red-600]="dwellTimeComparison()!.change < 0">
+                      {{ Math.abs(dwellTimeComparison()!.changePercent).toFixed(0) }}% More than yesterday
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overall Occupancy Chart -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+  <div class="flex items-center justify-between mb-4">
+    <h4 class="text-lg font-semibold text-gray-900">Overall Occupancy</h4>
+    <span class="text-xs text-gray-400 flex items-center gap-1">
+      <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+      Occupancy
+    </span>
+  </div>
+
+  <div class="h-80">
+    <canvas
+      baseChart
+      [data]="occupancyChartData()"
+      [options]="occupancyChartOptions"
+      [type]="'line'">
+    </canvas>
+  </div>
+</div>
+
+        </div>
+
+        <!-- Demographics Section -->
+        <div class="space-y-6">
+          <h3 class="text-xl font-semibold text-gray-900">Demographics</h3>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Demographics Doughnut Chart -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <div class="flex flex-col items-center justify-center h-80">
+                <div class="relative w-64 h-64 mb-6">
+                  <canvas #demographicsDoughnutChart baseChart
+                    [data]="demographicsDoughnutChartData()"
+                    [options]="demographicsDoughnutChartOptions"
+                    [type]="'doughnut'">
+                  </canvas>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                      <p class="text-2xl font-bold text-gray-900">Total Crowd</p>
+                      <p class="text-3xl font-bold text-gray-900">{{ getTotalCrowd() }}</p>
+                     
+                    </div>
+                  </div>
+                </div>
+                <div class="flex gap-8">
+                  <div class="flex items-center gap-2">
+                     <svg class="w-5 h-5 text-[#7FB8B6]" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2a3 3 0 100 6 3 3 0 000-6zm0 7c-3.314 0-6 2.239-6 5v6h3v-6c0-.552.448-1 1-1h4c.552 0 1 .448 1 1v6h3v-6c0-2.761-2.686-5-6-5z"/>
+        </svg>
+                    <span class="text-sm font-medium text-gray-700">{{ getMalePercentage() }}% Males</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                     <svg class="w-5 h-5 text-[#BFE3E1]" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2a3 3 0 100 6 3 3 0 000-6zm-2 7a4 4 0 00-4 4v2h3v7h2v-7h2v7h2v-7h3v-2a4 4 0 00-4-4h-4z"/>
+        </svg>
+                    <span class="text-sm font-medium text-gray-700">{{ getFemalePercentage() }}% Females</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Demographics Analysis Chart -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+              <h4 class="text-lg font-semibold text-gray-900 mb-4">Demographics Analysis</h4>
+              <div class="h-80">
+                <canvas #demographicsChart baseChart
+                  [data]="demographicsChartData()"
+                  [options]="demographicsChartOptions"
+                  [type]="'line'">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<div
+  *ngIf="showAlertsPanel()"
+  class="fixed inset-0 bg-black/40 z-40"
+  (click)="toggleAlertsPanel()">
+</div>
+<div
+  *ngIf="showAlertsPanel()"
+  class="fixed top-0 right-0 h-full w-[380px] bg-white z-50 shadow-2xl flex flex-col">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-3 border-b">
+    <h3 class="text-lg font-semibold text-gray-900">Alerts</h3>
+    <button
+      (click)="toggleAlertsPanel()"
+      class="text-gray-400 hover:text-gray-600">
+      ✕
+    </button>
+  </div>
+
+  <!-- Alerts list -->
+  <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+    <!-- Alert item -->
+    <div class="border rounded-lg p-3 flex gap-3">
+      <div class="flex -space-x-2">
+        <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-xs">F</div>
+        <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">R</div>
+        <div class="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center text-xs">P</div>
+      </div>
+
+      <div class="flex-1">
+        <p class="text-sm font-medium text-gray-900">Rohan</p>
+        <p class="text-xs text-gray-500">March 03 2025 · Zone A</p>
+      </div>
+
+      <span class="text-xs px-2 py-0.5 rounded bg-red-100 text-red-600">
+        High
+      </span>
+    </div>
+
+    <!-- Alert item -->
+    <div class="border rounded-lg p-3 flex gap-3">
+      <div class="flex -space-x-2">
+        <div class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs">A</div>
+        <div class="w-8 h-8 rounded-full bg-gray-500 text-white flex items-center justify-center text-xs">R</div>
+        <div class="w-8 h-8 rounded-full bg-gray-300 text-gray-800 flex items-center justify-center text-xs">3</div>
+      </div>
+
+      <div class="flex-1">
+        <p class="text-sm font-medium text-gray-900">Mathew</p>
+        <p class="text-xs text-gray-500">March 03 2025 · Zone C</p>
+      </div>
+
+      <span class="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-600">
+        Medium
+      </span>
+    </div>
+
+  </div>
+</div>
