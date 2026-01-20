@@ -1,0 +1,10 @@
+# Angular
+.angular/
+dist/
+browser/
+
+# Build files
+3rdpartylicenses.txt
+
+# Node
+node_modules/
