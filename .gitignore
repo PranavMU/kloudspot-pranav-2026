@@ -1,6 +1,5 @@
 # Angular
 .angular/
-dist/
 browser/
 
 # Build files
