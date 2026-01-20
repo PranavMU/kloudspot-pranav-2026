@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "crowd-management-system",
   "routes": [
     { "src": "/(.*)", "dest": "/index.html" }
   ]
