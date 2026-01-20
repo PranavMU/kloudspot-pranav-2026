@@ -1,9 +1,10 @@
 # Angular
 .angular/
-browser/
 
 # Build files
 3rdpartylicenses.txt
 
 # Node
 node_modules/
+.vercel
+.env*.local
